@@ -1,0 +1,143 @@
+/* Generic page level styling */
+body {
+    background-color: #1971D0;
+    color: white;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+a:hover {
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+}
+a:visited {
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+}
+
+/* styling for checkbox to make it a toggle switch */
+.onoffswitch {
+    position: relative; width: 90px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid #999999; border-radius: 20px;
+}
+.onoffswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    -moz-transition: margin 0.3s ease-in 0s; -webkit-transition: margin 0.3s ease-in 0s;
+    -o-transition: margin 0.3s ease-in 0s; transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "ON";
+    padding-left: 10px;
+    background-color: #000000; color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+    content: "OFF";
+    padding-right: 10px;
+    background-color: #EEEEEE; color: #999999;
+    text-align: right;
+}
+.onoffswitch-switch {
+    display: block; width: 18px; margin: 6px;
+    background: #FFFFFF;
+    border: 2px solid #999999; border-radius: 20px;
+    position: absolute; top: 0; bottom: 0; right: 56px;
+    -moz-transition: all 0.3s ease-in 0s; -webkit-transition: all 0.3s ease-in 0s;
+    -o-transition: all 0.3s ease-in 0s; transition: all 0.3s ease-in 0s; 
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px; 
+}
+
+
+.row {
+    padding: 10px 10px 50px 10px;
+    border: 1px solid white;
+}
+.roomSection { 
+    border: 1px solid white;
+}
+.control    {
+    width: 50%;
+    float: left;
+    padding-left: 10px;
+}
+.room  {
+    width: 50%;
+    float: right;
+}
+.status {
+    height: 100px;
+}
+.padding {
+    padding-bottom: 10px;
+    font-weight: bold;
+    font-size: 16px;
+}
+.image_off {
+    background-image: url("../img/btn_off.png");
+    background-repeat: no-repeat;
+}
+.image_on {
+    background-image: url("../img/btn_on.png");
+    background-repeat: no-repeat;
+}
+.fan_off {
+    background-image: url("../img/fan3_off.png");
+    background-repeat: no-repeat;
+}
+.fan_on {
+    background-image: url("../img/fan3_on.gif");
+    background-repeat: no-repeat;
+}
+.curtain {
+    background-color: #ffd700;
+    height: 1px;
+    width: 100px;
+}
+.names {
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+input[type=text] {
+    width: 40px;
+    padding: 3px 0 0 0;
+    text-align: center;
+    color: black;
+}
+.button {
+    text-indent: -9999px;
+    cursor: pointer;
+    width: 29px;
+    height: 29px;
+    text-align: center;
+    background: url(../img/buttons.png) no-repeat;
+}
+.dec {
+    background-position: 0 -29px;
+}
+.buttons {
+    padding: 20px 0 0 100px;
+}

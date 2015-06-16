@@ -1,0 +1,310 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Smart Home</title>
+  <!-- load the bootstrap stylesheet -->
+  <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" media="all" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="css/smartHome.css" media="all" />
+  <!-- load the libraries we need -->
+  <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.1/backbone-min.js"></script>
+  <!-- Load the jquery-knob library for the knob control -->
+  <script src="http://cdn.crunchify.com/wp-content/uploads/code/knob.js"></script>
+  
+  <!-- load our scripts -->
+  <script type="text/javascript" src="js/smart_home_router.js"></script>
+  <script type="text/javascript" src="js/models/room_model.js"></script>
+  <script type="text/javascript" src="js/views/index.js"></script>
+  <script type="text/javascript" src="js/views/room.js"></script>
+  <script type="text/javascript" src="js/views/room_show.js"></script>
+</head>
+<body>
+
+  <div class="container-fluid">
+    <div class="page-header headerText">
+      <h1>Welcome to your Smart Home</h1>
+      <p class="lead">
+
+      </p>
+    </div>
+
+    <div>
+      <div class="col-md-12" id="primary-content">
+        <!-- the container that gets populated with the index -->
+      </div>
+    </div>
+  </div>
+
+  <!-- the index container -->
+  <script type="text/template" id="indexTemplate">
+    <!--<div id="roomOptions">
+      <label for="select-choice-0" class="select">Select a Room: </label>
+      <select name="select-choice-0" id="select-choice-0">
+        <% _.each( rooms, function( room ){ %>
+          <option value="<%= room.id %>"><%= room.name %></option>
+        <% } %>
+      </select>
+    </div>-->
+    <div id="roomList">
+    <!-- The rooms gets displayed here -->
+    </div>
+  </script>
+
+  <!-- the room template, renders once for each item in the index -->
+  <script type="text/template" id="roomTemplate">
+    <div class="row">
+      <div class="padding" align="center"><%= room %></div>
+      <div class="col-md-6">
+        <div class="control" align="center">
+          <div class="padding">Appliances</div>
+
+          <!-- Appliances Control --> 
+          <% if (typeof appliances !== 'undefined') { %> 
+            <% _.each( appliances, function( appliance ){ %>
+
+              <!-- Handle the Boolean Controller Eg: Lights, TV-->
+              <% if (appliance.controlType === 'Boolean') { %> 
+                <div class="appliance">
+                  <div class="names"><%= appliance.name %>:
+                    <span class="switch">
+                      <div class="onoffswitch" data="switch" data-app-type="<%= appliance.name %>" data-app-display="<%= appliance.values.display %>">
+                        <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="switch_<%=appliance.name %><%= id %>" <% if (appliance.state == 'ON'){%> checked <% } %>>
+                        <label class="onoffswitch-label" for="myonoffswitch">
+                          <span class="onoffswitch-inner"></span>
+                          <span class="onoffswitch-switch"></span>
+                        </label>
+                      </div>
+                    </span>
+                  </div>
+                </div>
+              <% } %>
+
+              <!-- Handle the Range Controller Eg: Fan / Thermostat -->
+              <% if (appliance.controlType === 'Range') { %> 
+                <div class="names"><%= appliance.name %>: </div>
+                <div><input type="text" id="<%=appliance.name %>" class="dial" value="<%= appliance.state %>" data-step="<%= appliance.values.Step %>" data-min="<%= appliance.values.Min %>" data-max="<%= appliance.values.Max %>" data-fgColor="#000000"></div>
+              <% } %>
+            <% }); %>          
+          <% } %>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <!-- Room display --> 
+        <div id="room" class="room">
+            <div class="padding">State</div>
+            <% if (typeof appliances !== 'undefined') { %> 
+              <% _.each( appliances, function( appliance ){ %>
+                
+                <!-- Display the boolean control results -->
+                <% if (appliance.controlType === 'Boolean') { %> 
+                  
+                  <!-- All appliance type except Curtains has an image or text based result-->
+                  <% if (appliance.name !== 'Curtains'){ %>
+                    
+                    <!-- If display type is selected as Image, display the icons -->
+                    <% if (typeof appliance.values.display !== 'undefined' && appliance.values.display == 'Image') { %>
+                      <div id='room_<%=appliance.name %><%= id %>' class="status <% if (appliance.state == 'ON'){%> image_on <% } else {%> image_off <% } %>">
+                      </div>
+                    <% } %>
+                    
+                    <!-- If display type is selected as String, display the text -->
+                    <% if (typeof appliance.values.display !== 'undefined' && appliance.values.display == 'String') { %>
+                      <div id='room_<%=appliance.name %><%= id %>' class="status">
+                         <% if (appliance.state == 'ON'){%> ON <% } else {%> OFF <% } %>
+                      </div>
+                    <% } %>
+                  <% } %>
+
+                  <!-- Special handling for Curtains-->
+                  <% if (appliance.name === 'Curtains'){ %>
+                    <div id='curtain_<%= id %>' class='curtain'> </div>
+                  <% } %>
+                <% } %>
+              <% }); %>          
+            <% } %>
+        </div>
+      </div>
+    </div>
+  </script>
+
+
+  <!-- kick off the app -->
+  <script type="text/javascript">
+   $(function() {
+        $(".dial").knob();
+    });
+
+    var router = new APP.SmartHomeRouter({
+      rooms: new APP.RoomCollection()
+    });
+
+    // we manually pass in the initial data, but this would be called with a collection.fetch() normally
+    // Chrome no longer allows loading local files.
+    router.rooms.reset([
+      {
+        "room": "Living Room",
+        "id": "1",
+        "appliances": [
+          {
+            "name": "Light",
+            "state": "ON",
+            "controlType": "Boolean",
+            "values": {
+              "display": "Image"
+            }
+          },
+          {
+            "name": "Fan",
+            "controlType": "Range",
+            "state": 2,
+            "values": {
+              "Min": 0,
+              "Max": 3,
+              "Step": 1
+            }
+          },
+          {
+            "name": "Thermostat",
+            "controlType": "Range",
+            "state": 68,
+            "values": {
+              "Min": 55,
+              "Max": 100,
+              "Step": 1
+            }
+          },
+          {
+            "name": "Curtains",
+            "state": "OFF",
+            "controlType": "Boolean",
+            "values": {
+              "display": "String"
+            }
+          }
+        ]
+      },
+      {
+        "room": "Kitchen",
+        "id": "2",
+        "appliances": [
+          {
+            "name": "Light",
+            "state": "ON",
+            "controlType": "Boolean",
+            "values": {
+              "display": "String"
+            }
+          },
+          {
+            "name": "Diswasher",
+            "state": "OFF",
+            "controlType": "Boolean",
+            "values": {
+              "display": "String"
+            }
+          },
+          {
+            "name": "Thermostat",
+            "controlType": "Range",
+            "state": 74,
+            "values": {
+              "Min": 55,
+              "Max": 100,
+              "Step": 1
+            }
+          }
+        ]
+      },
+      {
+        "room": "Master BedRoom",
+        "id": "3",
+        "appliances": [
+          {
+            "name": "Light",
+            "state": "OFF",
+            "controlType": "Boolean",
+            "values": {
+              "display": "String"
+            }
+          },
+          {
+            "name": "Fan",
+            "controlType": "Range",
+            "state": 2,
+            "values": {
+              "Min": 0,
+              "Max": 3,
+              "Step": 1
+            }
+          },
+          {
+            "name": "Thermostat",
+            "controlType": "Range",
+            "state": 65,
+            "values": {
+              "Min": 55,
+              "Max": 100,
+              "Step": 1
+            }
+          },
+          {
+            "name": "Curtains",
+            "state": "OFF",
+            "controlType": "Boolean",
+            "values": {
+              "display": "String"
+            }
+          }
+        ]
+      },
+      {
+        "room": "Guest BedRoom",
+        "id": "4",
+        "appliances": [
+          {
+            "name": "Light",
+            "state": "ON",
+            "controlType": "Boolean",
+            "values": {
+              "display": "String"
+            }
+          },
+          {
+            "name": "Fan",
+            "controlType": "Range",
+            "state": 2,
+            "values": {
+              "Min": 0,
+              "Max": 3,
+              "Step": 1
+            }
+          },
+          {
+            "name": "Thermostat",
+            "controlType": "Range",
+            "state": 70,
+            "values": {
+              "Min": 55,
+              "Max": 100,
+              "Step": 1
+            }
+          },
+          {
+            "name": "Curtains",
+            "state": "OFF",
+            "controlType": "Boolean",
+            "values": {
+              "display": "String"
+            }
+          }
+        ]
+      }
+    ]);
+    
+    // now that everyting is setup we tell backbone to watch the urls
+    Backbone.history.start();
+  </script>
+</body>
+</html>

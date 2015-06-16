@@ -1,0 +1,65 @@
+[
+  {
+    "room": "Living Room",
+    "id": "1",
+    "appliances": [
+      {
+        "type": "Light",
+        "power": "ON"
+      },
+      {
+        "type": "Fan",
+        "power": "ON"
+      },
+      {
+        "type": "TV",
+        "power": "OFF"
+      }
+    ],
+    "temp": "70",
+    "curtains": "OFF"
+  },
+  {
+    "room": "Kitchen",
+    "id": "2",
+    "appliances":  [
+      {
+        "type": "Light",
+        "power": "ON"
+      }
+    ],
+    "temp": "74",
+  },
+  {
+    "room": "Master BedRoom",
+    "id": "3",
+    "appliances":  [
+      {
+        "type": "Light",
+        "power": "OFF"
+      },
+      {
+        "type": "Fan",
+        "power": "OFF"
+      }
+    ],
+    "temp": "65",
+    "curtains": "OFF"
+  },
+  {
+    "room": "Guest BedRoom",
+    "id": "4",
+    "appliances": [
+      {
+        "type": "Light",
+        "power": "ON"
+      },
+      {
+        "type": "Fan",
+        "power": "OFF"
+      }
+    ],
+    "temp": "70",
+    "curtains": "OFF"
+  }
+]
