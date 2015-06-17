@@ -119,9 +119,15 @@
 
                   <!-- Special handling for Curtains-->
                   <% if (appliance.name === 'Curtains'){ %>
+                    <%=appliance.displayName %>
                     <div id='curtain_<%= id %>' class='curtain'> </div>
                   <% } %>
                 <% } %>
+
+                <% if (appliance.controlType === 'Range') { %> 
+                  <div id='room_<%=appliance.name %><%= id %>' class="status"> <%=appliance.displayName %>: <%=appliance.state %></div>
+                <% } %>
+
               <% }); %>          
             <% } %>
         </div>
@@ -151,6 +157,7 @@
             "name": "Light",
             "state": "ON",
             "controlType": "Boolean",
+            "displayName": "Light",
             "values": {
               "display": "Image"
             }
@@ -158,6 +165,7 @@
           {
             "name": "Fan",
             "controlType": "Range",
+            "displayName": "Fan",
             "state": 2,
             "values": {
               "Min": 0,
@@ -168,6 +176,7 @@
           {
             "name": "Thermostat",
             "controlType": "Range",
+            "displayName": "Thermostat",
             "state": 68,
             "values": {
               "Min": 55,
@@ -179,6 +188,7 @@
             "name": "Curtains",
             "state": "OFF",
             "controlType": "Boolean",
+            "displayName": "Curtains",
             "values": {
               "display": "String"
             }
@@ -193,6 +203,7 @@
             "name": "Light",
             "state": "ON",
             "controlType": "Boolean",
+            "displayName": "Light",
             "values": {
               "display": "String"
             }
@@ -201,6 +212,7 @@
             "name": "Diswasher",
             "state": "OFF",
             "controlType": "Boolean",
+            "displayName": "Dishwasher",
             "values": {
               "display": "String"
             }
@@ -208,6 +220,7 @@
           {
             "name": "Thermostat",
             "controlType": "Range",
+            "displayName": "Thermostat",
             "state": 74,
             "values": {
               "Min": 55,
@@ -225,6 +238,7 @@
             "name": "Light",
             "state": "OFF",
             "controlType": "Boolean",
+            "displayName": "Light",
             "values": {
               "display": "String"
             }
@@ -232,6 +246,7 @@
           {
             "name": "Fan",
             "controlType": "Range",
+            "displayName": "Fan",
             "state": 2,
             "values": {
               "Min": 0,
@@ -242,6 +257,7 @@
           {
             "name": "Thermostat",
             "controlType": "Range",
+            "displayName": "Thermostat",
             "state": 65,
             "values": {
               "Min": 55,
@@ -253,6 +269,7 @@
             "name": "Curtains",
             "state": "OFF",
             "controlType": "Boolean",
+            "displayName": "Curtains",
             "values": {
               "display": "String"
             }
@@ -267,6 +284,7 @@
             "name": "Light",
             "state": "ON",
             "controlType": "Boolean",
+            "displayName": "Light",
             "values": {
               "display": "String"
             }
@@ -274,6 +292,7 @@
           {
             "name": "Fan",
             "controlType": "Range",
+            "displayName": "Fan",
             "state": 2,
             "values": {
               "Min": 0,
@@ -284,6 +303,7 @@
           {
             "name": "Thermostat",
             "controlType": "Range",
+            "displayName": "Thermostat",
             "state": 70,
             "values": {
               "Min": 55,
@@ -295,6 +315,7 @@
             "name": "Curtains",
             "state": "OFF",
             "controlType": "Boolean",
+            "displayName": "Curtains",
             "values": {
               "display": "String"
             }
