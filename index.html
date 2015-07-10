@@ -83,7 +83,7 @@
               <!-- Handle the Range Controller Eg: Fan / Thermostat -->
               <% if (appliance.controlType === 'Range') { %> 
                 <div class="names"><%= appliance.name %>: </div>
-                <div><input type="text" id="<%=appliance.name %>" class="dial" value="<%= appliance.state %>" data-step="<%= appliance.values.Step %>" data-min="<%= appliance.values.Min %>" data-max="<%= appliance.values.Max %>" data-fgColor="#000000"></div>
+                <div><input type="text" id="<%=appliance.name %><%= id %>" class="dial" value="<%= appliance.state %>" data-step="<%= appliance.values.Step %>" data-min="<%= appliance.values.Min %>" data-max="<%= appliance.values.Max %>" data-fgColor="#000000"></div>
               <% } %>
             <% }); %>          
           <% } %>
@@ -125,7 +125,8 @@
                 <% } %>
 
                 <% if (appliance.controlType === 'Range') { %> 
-                  <div id='room_<%=appliance.name %><%= id %>' class="status"> <%=appliance.displayName %>: <%=appliance.state %></div>
+                  <%=appliance.displayName %>: 
+                  <div id='room_<%=appliance.name %><%= id %>' class="status">  <%=appliance.state %></div>
                 <% } %>
 
               <% }); %>          
@@ -139,7 +140,11 @@
   <!-- kick off the app -->
   <script type="text/javascript">
    $(function() {
-        $(".dial").knob();
+        $(".dial").knob({
+          release: function (value) {
+            $('#room_'+this.$.attr("id")).html(value);
+          }
+        });
     });
 
     var router = new APP.SmartHomeRouter({
